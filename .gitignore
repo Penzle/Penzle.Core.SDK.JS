@@ -30,6 +30,8 @@ speed-measure-plugin.json
 !.vscode/launch.json
 !.vscode/extensions.json
 .history/*
+.vs/Penzle.Core.SDK.JS/*
+.vs/*
 
 # misc
 /.angular/cache
