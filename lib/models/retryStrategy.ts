@@ -1,24 +1,36 @@
-export interface RetryStrategy {
-	options: RetryStrategySettings;
-	retryAttempts: number;
-}
-
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export interface RetryStrategySettings {
 	/**
-	 * back-off interval between retries
+	 * The number of times to retry before failing
+	 * default: 3
+	 *
+	 * @type {number}
 	 */
-	deltaBackoffMs?: number;
+	retries?: number;
 	/**
-	 * Maximum allowed number of attempts
+	 * Defines if the timeout should be reset between retries
+	 * default: false
+	 *
+	 * @type {boolean}
 	 */
-	maxAttempts?: number;
+	shouldResetTimeout?: boolean;
 	/**
-	 * Indicates if jitter is added to retry
+	 * A callback to further control if a request should be retried. By default, it retries if the result did not have a response.
+	 * default: error => !error.response
+	 *
+	 * @type {Function}
 	 */
-	addJitter?: boolean;
+	retryCondition?: (error: any) => boolean | Promise<boolean>;
 	/**
-	 * Determines if error can be retried. There are errors that are never retried
-	 * such as when request is cancelled or the response status is 404 and so on...
+	 * A callback to further control the delay between retry requests. By default there is no delay.
+	 *
+	 * @type {Function}
 	 */
-	canRetryError?: (error: any) => boolean;
+	retryDelay?: (retryCount: number, error: any) => number;
+	/**
+	 * A callback to get notified when a retry occurs, the number of times it has occurre, and the error
+	 *
+	 * @type {Function}
+	 */
+	onRetry?: (retryCount: number, error: any, requestConfig: any) => void;
 }

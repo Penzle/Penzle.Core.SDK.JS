@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Header } from './header';
-import { RetryStrategy } from './retryStrategy';
+import { RetryStrategySettings } from './retryStrategy';
 
-export interface IResponse<T> {
+export interface Response<T> {
 	data: T;
 	headers: Header[];
 	rawResponse: any;
 	status: number;
-	retryStrategy: RetryStrategy;
+	retryStrategy?: RetryStrategySettings;
 }

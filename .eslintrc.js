@@ -13,6 +13,9 @@ module.exports = {
 		'plugin:prettier/recommended'
 	],
 	rules: {
+		'class-methods-use-this': 'off',
+		'import/prefer-default-export': 'off',
+		'import/no-default-export': 'off'
 		// indent: [2, 'tab', { SwitchCase: 1, VariableDeclarator: 1 }],
 		// 'no-tabs': 0
 	}

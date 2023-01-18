@@ -1,25 +1,116 @@
-import axios, { AxiosInstance, AxiosRequestConfig, CancelToken } from 'axios';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import axios, { AxiosInstance, AxiosRequestConfig, CancelToken, Canceler } from 'axios';
+import axiosRetry, { IAxiosRetryConfig } from 'axios-retry';
+import { HttpGet, HttpRequestCancellationToken, HttpSettings, Response, RetryStrategySettings } from '../models';
+import { getHeaders } from '../utilities/http.utilities.functions';
+import { HttpPost, HttpDelete, HttpPatch, HttpPut } from '../models/http-methods';
+import { ApiService } from './api.interface';
+import { ResponseFactory } from './response.factory';
 
-export default class HttpService {
+export class HttpService implements ApiService<CancelToken> {
 	private readonly axiosInstance: AxiosInstance;
 
-	constructor(private opts?: { axiosRequestConfig?: AxiosRequestConfig; logErrorsToConsole?: boolean }) {
-		this.axiosInstance = axios.create(opts?.axiosRequestConfig);
-		// this.functionsConfig = this.getFunctionsConfig();
+	readonly defaultRetryStrategy: IAxiosRetryConfig = {
+		retries: 5,
+		retryDelay: axiosRetry.exponentialDelay
+	};
+
+	constructor(private settings?: { axiosRequestConfig?: AxiosRequestConfig; axiosInstance?: AxiosInstance }) {
+		if (settings?.axiosInstance) {
+			this.axiosInstance = settings.axiosInstance;
+		} else {
+			this.axiosInstance = axios.create(settings?.axiosRequestConfig);
+		}
 	}
 
-	async get<T>(url: string): Promise<T> {
-		const axiosResponse = await this.axiosInstance.get<T>(call.url, {
-			headers: getHeadersJson(options?.headers ?? [], false),
-			responseType: options?.responseType,
-			cancelToken: options?.cancelToken?.token
+	async get<TResult>(method: HttpGet, settings?: HttpSettings<CancelToken>): Promise<Response<TResult>> {
+		const retryStrategyConfig = this.getRetryPolicy(settings?.retryStrategy);
+
+		const axiosResponse = await this.axiosInstance.get<TResult>(method.url, {
+			headers: getHeaders(settings?.headers ?? [], false),
+			responseType: settings?.responseType,
+			cancelToken: settings?.cancellationToken?.token,
+			'axios-retry': retryStrategyConfig
 		});
+
+		return ResponseFactory.create<TResult>(axiosResponse, retryStrategyConfig);
 	}
 
-	// async getAsync<TRawData>(
-	// 	call: IHttpGetQueryCall,
-	// 	options?: IHttpQueryOptions<CancelToken>
-	// ): Promise<IResponse<TRawData>> {
-	// 	return await HttpFunctions.getWithRetryAsync<TRawData>(this.axiosInstance, call, this.functionsConfig, options);
-	// }
+	async post<TResult>(method: HttpPost, settings?: HttpSettings<CancelToken>): Promise<Response<TResult>> {
+		const retryStrategyConfig = this.getRetryPolicy(settings?.retryStrategy);
+
+		const axiosResponse = await this.axiosInstance.post<TResult>(method.url, method.body, {
+			headers: getHeaders(settings?.headers ?? [], false),
+			responseType: settings?.responseType,
+			cancelToken: settings?.cancellationToken?.token,
+			maxContentLength: 'Infinity' as any,
+			maxBodyLength: 'Infinity' as any,
+			'axios-retry': retryStrategyConfig
+		});
+
+		return ResponseFactory.create<TResult>(axiosResponse, retryStrategyConfig);
+	}
+
+	async delete<TResult>(method: HttpDelete, settings?: HttpSettings<CancelToken>): Promise<Response<TResult>> {
+		const retryStrategyConfig = this.getRetryPolicy(settings?.retryStrategy);
+
+		const axiosResponse = await this.axiosInstance.delete<TResult>(method.url, {
+			headers: getHeaders(settings?.headers ?? [], false),
+			responseType: settings?.responseType,
+			cancelToken: settings?.cancellationToken?.token,
+			maxContentLength: 'Infinity' as any,
+			maxBodyLength: 'Infinity' as any,
+			'axios-retry': retryStrategyConfig
+		});
+
+		return ResponseFactory.create<TResult>(axiosResponse, retryStrategyConfig);
+	}
+
+	async patch<TResult>(method: HttpPatch, settings?: HttpSettings<CancelToken>): Promise<Response<TResult>> {
+		const retryStrategyConfig = this.getRetryPolicy(settings?.retryStrategy);
+
+		const axiosResponse = await this.axiosInstance.patch<TResult>(method.url, method.body, {
+			headers: getHeaders(settings?.headers ?? [], false),
+			responseType: settings?.responseType,
+			cancelToken: settings?.cancellationToken?.token,
+			maxContentLength: 'Infinity' as any,
+			maxBodyLength: 'Infinity' as any,
+			'axios-retry': retryStrategyConfig
+		});
+
+		return ResponseFactory.create<TResult>(axiosResponse, retryStrategyConfig);
+	}
+
+	async put<TResult>(method: HttpPut, settings?: HttpSettings<CancelToken>): Promise<Response<TResult>> {
+		const retryStrategyConfig = this.getRetryPolicy(settings?.retryStrategy);
+
+		const axiosResponse = await this.axiosInstance.patch<TResult>(method.url, method.body, {
+			headers: getHeaders(settings?.headers ?? [], false),
+			responseType: settings?.responseType,
+			cancelToken: settings?.cancellationToken?.token,
+			maxContentLength: 'Infinity' as any,
+			maxBodyLength: 'Infinity' as any,
+			'axios-retry': retryStrategyConfig
+		});
+
+		return ResponseFactory.create<TResult>(axiosResponse, retryStrategyConfig);
+	}
+
+	createCancellationToken(): HttpRequestCancellationToken<CancelToken> {
+		let canceler: Canceler;
+
+		const axiosToken = new axios.CancelToken((c) => {
+			// An executor function receives a cancel function as a parameter
+			canceler = c;
+		});
+
+		return {
+			cancel: (cancelMessage) => canceler(`Request cancelled: ${cancelMessage ?? 'User cancel'}`),
+			token: axiosToken
+		};
+	}
+
+	private getRetryPolicy(retryStrategy?: RetryStrategySettings): IAxiosRetryConfig {
+		return retryStrategy ?? this.defaultRetryStrategy;
+	}
 }
