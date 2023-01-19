@@ -1,6 +1,6 @@
 {
   "name": "@penzle/core-sdk",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "This package includes the core modules and utilities for the penzle-delivery.js and penzle-management.js SDKs.",
   "main": "./dist/cjs/index.js",
   "module": "./dist/es6/index.js",
