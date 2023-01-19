@@ -29,7 +29,7 @@ export function getHeadersFromAxiosResponse(response: AxiosResponse): Header[] {
 	Object.keys(response?.headers).forEach((headerKey) => {
 		headers.push({
 			header: headerKey,
-			value: response.headers[headerKey]
+			value: response.headers[headerKey] ?? ''
 		});
 	});
 

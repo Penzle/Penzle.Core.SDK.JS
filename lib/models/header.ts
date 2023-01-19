@@ -1,4 +1,4 @@
 export interface Header {
 	header: string;
-	value?: string;
+	value: string;
 }

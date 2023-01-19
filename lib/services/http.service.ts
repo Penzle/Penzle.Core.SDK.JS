@@ -15,7 +15,7 @@ export class HttpService implements ApiService<CancelToken> {
 		retryDelay: axiosRetry.exponentialDelay
 	};
 
-	constructor(private settings?: { axiosRequestConfig?: AxiosRequestConfig; axiosInstance?: AxiosInstance }) {
+	constructor(settings?: { axiosRequestConfig?: AxiosRequestConfig; axiosInstance?: AxiosInstance }) {
 		if (settings?.axiosInstance) {
 			this.axiosInstance = settings.axiosInstance;
 		} else {
