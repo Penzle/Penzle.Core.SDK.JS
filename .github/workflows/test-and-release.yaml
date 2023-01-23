@@ -1,5 +1,5 @@
 name: Test and Release
-on: [workflow_run]
+on: [workflow_dispatch]
   
 jobs:
  test-and-release:
