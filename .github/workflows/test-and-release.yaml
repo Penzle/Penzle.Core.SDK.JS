@@ -12,6 +12,8 @@ jobs:
       uses: actions/setup-node@v3.6.0
     - name: Install dependencies
       run: npm i
+    - name: Install Crhome
+      run: npm i -D karma-chrome-launcher
     - name: Build
       run: npm run build:all
     - name: Run tests
