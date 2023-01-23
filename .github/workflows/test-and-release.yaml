@@ -15,7 +15,9 @@ jobs:
     - name: Build
       run: npm run build:all
     - name: Run tests
-      run: npm run test:all
+      run: npm run test:gh-actions
+    - name: Run lint
+      run: npm run lint
     - name: Release
       env:
         NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
