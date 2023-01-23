@@ -1,4 +1,4 @@
-export interface HttpRequestCancellationToken<TCancellationToken> {
-	token?: TCancellationToken;
+export interface HttpCancellationToken<TCancellationToken> {
+	token: TCancellationToken;
 	cancel: (cancelMessage?: string) => void;
 }
