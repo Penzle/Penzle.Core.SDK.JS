@@ -7,7 +7,7 @@ import {
 	HttpGet,
 	HttpSettings,
 	Response,
-	HttpRequestCancellationToken
+	HttpCancellationToken
 } from '../models';
 
 export interface ApiService<TCancellationToken> {
@@ -16,5 +16,5 @@ export interface ApiService<TCancellationToken> {
 	delete<TResult>(method: HttpDelete, settings?: HttpSettings<TCancellationToken>): Promise<Response<TResult>>;
 	patch<TResult>(method: HttpPatch, settings?: HttpSettings<TCancellationToken>): Promise<Response<TResult>>;
 	put<TResult>(method: HttpPut, settings?: HttpSettings<TCancellationToken>): Promise<Response<TResult>>;
-	createCancellationToken(): HttpRequestCancellationToken<CancelToken>;
+	createCancellationToken(): HttpCancellationToken<CancelToken>;
 }

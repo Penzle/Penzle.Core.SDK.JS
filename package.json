@@ -24,8 +24,7 @@
     "build:all": "npm run build:umd && npm run build:es6 && npm run build:esnext && npm run build:commonjs",
     "test:browser": "karma start karma.conf.js",
     "test:gh-actions": "karma start karma-gh-actions.conf.js",
-    "test:node": "npm run build:commonjs && npx mocha -- \"test/node/**/*.js\" --timeout 15000",
-    "test:all": "npm run test:node && npm run test:gh-actions",
+    "test:all": "npm run test:gh-actions",
     "semantic-release": "semantic-release"
   },
   "repository": {

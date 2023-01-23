@@ -3,12 +3,12 @@
 import { CancelToken } from 'axios';
 import { ApiService } from './api.interface';
 import {
+	HttpCancellationToken,
 	HttpDelete,
 	HttpGet,
 	HttpPatch,
 	HttpPost,
 	HttpPut,
-	HttpRequestCancellationToken,
 	HttpSettings,
 	Response
 } from '../models';
@@ -42,10 +42,10 @@ export class TestHttpService implements ApiService<undefined> {
 		return this.resolveTestCall();
 	}
 
-	createCancellationToken(): HttpRequestCancellationToken<CancelToken> {
+	createCancellationToken(): HttpCancellationToken<CancelToken> {
 		return {
 			cancel: () => {},
-			token: undefined
+			token: { promise: new Promise(() => {}), reason: undefined, throwIfRequested: () => {} }
 		};
 	}
 

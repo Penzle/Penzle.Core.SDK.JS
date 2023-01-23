@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import axios, { AxiosInstance, AxiosRequestConfig, CancelToken, Canceler } from 'axios';
 import axiosRetry, { IAxiosRetryConfig } from 'axios-retry';
-import { HttpGet, HttpRequestCancellationToken, HttpSettings, Response, RetryStrategySettings } from '../models';
+import { HttpCancellationToken, HttpGet, HttpSettings, Response, RetryStrategySettings } from '../models';
 import { getHeaders } from '../utilities/http.utilities.functions';
 import { HttpPost, HttpDelete, HttpPatch, HttpPut } from '../models/http-methods';
 import { ApiService } from './api.interface';
@@ -96,7 +96,7 @@ export class HttpService implements ApiService<CancelToken> {
 		return ResponseFactory.create<TResult>(axiosResponse, retryStrategyConfig);
 	}
 
-	createCancellationToken(): HttpRequestCancellationToken<CancelToken> {
+	createCancellationToken(): HttpCancellationToken<CancelToken> {
 		let canceler: Canceler;
 
 		const axiosToken = new axios.CancelToken((c) => {
@@ -105,7 +105,7 @@ export class HttpService implements ApiService<CancelToken> {
 		});
 
 		return {
-			cancel: (cancelMessage) => canceler(`Request cancelled: ${cancelMessage ?? 'User cancel'}`),
+			cancel: (cancelMessage: any) => canceler(`Request cancelled: ${cancelMessage ?? 'User cancel'}`),
 			token: axiosToken
 		};
 	}
