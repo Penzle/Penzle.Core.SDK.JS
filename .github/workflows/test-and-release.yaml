@@ -2,6 +2,7 @@ name: Test and Release
 on: 
   pull_request:
     branches: [main]
+  workflow_dispatch: 
   
 jobs:
  test-and-release:
