@@ -13,9 +13,9 @@ jobs:
     - name: Install dependencies
       run: npm i
     - name: Build
-      run: npm build:all
+      run: npm run build:all
     - name: Run tests
-      run: npm test:all
+      run: npm run test:all
     - name: Release
       env:
         NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
