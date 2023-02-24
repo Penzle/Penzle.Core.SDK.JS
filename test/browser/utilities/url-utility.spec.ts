@@ -37,4 +37,24 @@ describe('Add parameters to URL', () => {
 
 		expect(UrlHelper.addParametersToUrl(url)).toEqual(url);
 	});
+
+	it('should add parameters to a URL with no query parameters', () => {
+		const url = 'https://example.com/api/test';
+		const parameters: QueryParameter[] = [
+			{ getParameter: () => 'param1=value1' },
+			{ getParameter: () => 'param2=value2' }
+		];
+		const result = UrlHelper.addParametersToUrl(url, parameters);
+		expect(result).toBe('https://example.com/api/test?param1=value1&param2=value2');
+	});
+
+	it('should add parameters to a URL with existing query parameters', () => {
+		const url = 'https://example.com/api/test?param0=value0';
+		const parameters: QueryParameter[] = [
+			{ getParameter: () => 'param1=value1' },
+			{ getParameter: () => 'param2=value2' }
+		];
+		const result = UrlHelper.addParametersToUrl(url, parameters);
+		expect(result).toBe('https://example.com/api/test?param0=value0&param1=value1&param2=value2');
+	});
 });
