@@ -76,7 +76,7 @@ This method returns the retry policy based on the provided `RetryStrategySetting
 
 ### Usage
 
-To use the `HttpService`, create an instance and pass the desired settings (if any) to the constructor. Then, call the appropriate method (e.g., `get`, `post`, `delete`, `patch`, `put`) with the required `HttpMethod` object and optional `HttpSettings` object
+To use the `HttpService`, create an instance and pass the desired settings (if any) to the constructor. Then, call the appropriate method (e.g., `get`, `post`, `delete`, `patch`, `put`) with the required `HttpMethod` object and optional `HttpSettings` object.
 
 ## Debugging
 
